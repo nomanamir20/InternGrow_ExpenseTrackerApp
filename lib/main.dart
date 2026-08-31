@@ -13,6 +13,8 @@ import 'data/models/budget_model.dart';
 import 'data/models/category_model.dart';
 import 'data/models/transaction_model.dart';
 import 'data/models/transaction_type.dart';
+import 'features/categories/controllers/category_controller.dart';
+import 'features/transactions/controllers/transaction_controller.dart';
 import 'firebase_options.dart';
 
 Future<void> main() async {
@@ -30,7 +32,6 @@ Future<void> main() async {
   final categoriesBox = await Hive.openBox<CategoryModel>(HiveBoxes.categories);
   await Hive.openBox<BudgetModel>(HiveBoxes.budgets);
 
-  // Seed default categories on first launch only.
   if (categoriesBox.isEmpty) {
     for (final category in buildDefaultCategories()) {
       await categoriesBox.put(category.id, category);
@@ -41,18 +42,23 @@ Future<void> main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
-  final themeController = Get.put(ThemeController());
+  // Register all app-wide controllers ONCE here, rather than ad hoc in
+  // individual screens via Get.put — this guarantees they're available
+  // via Get.find() no matter which screen the user reaches first.
+  Get.put(ThemeController());
+  Get.put(CategoryController(), permanent: true);
+  Get.put(TransactionController(), permanent: true);
 
-  runApp(InternGrowExpenseTrackerApp(themeController: themeController));
+  runApp(const InternGrowExpenseTrackerApp());
 }
 
 class InternGrowExpenseTrackerApp extends StatelessWidget {
-  final ThemeController themeController;
-
-  const InternGrowExpenseTrackerApp({super.key, required this.themeController});
+  const InternGrowExpenseTrackerApp({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final themeController = Get.find<ThemeController>();
+
     return Obx(() {
       return GetMaterialApp(
         title: 'InternGrow Finance',

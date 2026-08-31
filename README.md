@@ -11,13 +11,13 @@
 
 ## ✨ Features
 
-- [ ] Add Income
-- [ ] Add Expenses
-- [ ] Categories
+- [x] Add Income
+- [x] Add Expenses
+- [x] Categories
 - [ ] Monthly Reports
 - [ ] Charts
 - [ ] Budget Tracking
-- [ ] Transaction History
+- [x] Transaction History
 
 ### Upgrade Features
 - [ ] Local Database (Hive)

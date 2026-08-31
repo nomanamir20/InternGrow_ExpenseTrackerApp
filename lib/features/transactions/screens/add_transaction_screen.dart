@@ -29,7 +29,7 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
   @override
   void initState() {
     super.initState();
-    _controller = Get.put(TransactionController(), permanent: true);
+    _controller = Get.find<TransactionController>();
 
     // Preselect the transaction type if one was passed in (e.g. "+ Income"
     // vs "+ Expense" quick-action buttons on Home, built in a later step).

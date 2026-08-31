@@ -21,7 +21,7 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
   @override
   void initState() {
     super.initState();
-    _controller = Get.put(CategoryController(), permanent: true);
+    _controller = Get.find<CategoryController>();
   }
 
   void _showAddCategoryDialog() {
