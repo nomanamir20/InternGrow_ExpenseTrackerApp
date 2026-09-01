@@ -16,7 +16,7 @@
 - [x] Categories
 - [x] Monthly Reports
 - [x] Charts
-- [ ] Budget Tracking
+- [x] Budget Tracking
 - [x] Transaction History
 
 ### Upgrade Features

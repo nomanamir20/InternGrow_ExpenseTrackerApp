@@ -15,6 +15,7 @@ import 'data/models/transaction_type.dart';
 import 'features/categories/controllers/category_controller.dart';
 import 'features/transactions/controllers/transaction_controller.dart';
 import 'features/reports/controllers/reports_controller.dart';
+import 'features/budget/controllers/budget_controller.dart';
 import 'firebase_options.dart';
 
 Future<void> main() async {
@@ -45,10 +46,11 @@ Future<void> main() async {
   // Register all app-wide controllers ONCE here, rather than ad hoc in
   // individual screens via Get.put — this guarantees they're available
   // via Get.find() no matter which screen the user reaches first.
-  Get.put(ThemeController());
+   Get.put(ThemeController());
   Get.put(CategoryController(), permanent: true);
   Get.put(TransactionController(), permanent: true);
   Get.put(ReportsController(), permanent: true);
+  Get.put(BudgetController(), permanent: true);
 
   runApp(const InternGrowExpenseTrackerApp());
 }
