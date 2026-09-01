@@ -14,8 +14,8 @@
 - [x] Add Income
 - [x] Add Expenses
 - [x] Categories
-- [ ] Monthly Reports
-- [ ] Charts
+- [x] Monthly Reports
+- [x] Charts
 - [ ] Budget Tracking
 - [x] Transaction History
 

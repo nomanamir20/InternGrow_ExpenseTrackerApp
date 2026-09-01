@@ -2,7 +2,6 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-
 import 'core/constants/default_categories.dart';
 import 'core/constants/hive_boxes.dart';
 import 'core/routes/app_pages.dart';
@@ -15,6 +14,7 @@ import 'data/models/transaction_model.dart';
 import 'data/models/transaction_type.dart';
 import 'features/categories/controllers/category_controller.dart';
 import 'features/transactions/controllers/transaction_controller.dart';
+import 'features/reports/controllers/reports_controller.dart';
 import 'firebase_options.dart';
 
 Future<void> main() async {
@@ -48,6 +48,7 @@ Future<void> main() async {
   Get.put(ThemeController());
   Get.put(CategoryController(), permanent: true);
   Get.put(TransactionController(), permanent: true);
+  Get.put(ReportsController(), permanent: true);
 
   runApp(const InternGrowExpenseTrackerApp());
 }
