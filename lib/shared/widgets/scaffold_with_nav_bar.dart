@@ -4,7 +4,7 @@ import 'package:get/get.dart';
 import '../../core/routes/app_routes.dart';
 import '../../data/models/transaction_type.dart';
 import '../../features/home/screens/home_screen.dart';
-import '../../features/transactions/screens/transaction_history_screen.dart';
+import '../../features/transactions/screens/transactions_screen.dart';
 import '../../features/reports/screens/reports_screen.dart';
 import '../../features/budget/screens/budget_screen.dart';
 import '../../features/profile/screens/profile_screen.dart';
@@ -77,18 +77,22 @@ class ScaffoldWithNavBar extends StatelessWidget {
           child: const Icon(Icons.add),
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-        bottomNavigationBar: BottomAppBar(
-          shape: const CircularNotchedRectangle(),
-          notchMargin: 8,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              _NavIcon(icon: Icons.dashboard_outlined, activeIcon: Icons.dashboard, label: 'Home', index: 0, controller: controller),
-              _NavIcon(icon: Icons.receipt_long_outlined, activeIcon: Icons.receipt_long, label: 'History', index: 1, controller: controller),
-              const SizedBox(width: 40), // space for the notch/FAB
-              _NavIcon(icon: Icons.pie_chart_outline, activeIcon: Icons.pie_chart, label: 'Reports', index: 2, controller: controller),
-              _NavIcon(icon: Icons.person_outline, activeIcon: Icons.person, label: 'Profile', index: 4, controller: controller),
-            ],
+        bottomNavigationBar: SizedBox(
+          height: 64,
+          child: BottomAppBar(
+            shape: const CircularNotchedRectangle(),
+            notchMargin: 8,
+            padding: EdgeInsets.zero,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                _NavIcon(icon: Icons.dashboard_outlined, activeIcon: Icons.dashboard, label: 'Home', index: 0, controller: controller),
+                _NavIcon(icon: Icons.receipt_long_outlined, activeIcon: Icons.receipt_long, label: 'History', index: 1, controller: controller),
+                const SizedBox(width: 40),
+                _NavIcon(icon: Icons.pie_chart_outline, activeIcon: Icons.pie_chart, label: 'Reports', index: 2, controller: controller),
+                _NavIcon(icon: Icons.person_outline, activeIcon: Icons.person, label: 'Profile', index: 4, controller: controller),
+              ],
+            ),
           ),
         ),
       );
@@ -118,16 +122,20 @@ class _NavIcon extends StatelessWidget {
     return InkWell(
       onTap: () => controller.changeTab(index),
       child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+        padding: const EdgeInsets.symmetric(horizontal: 10),
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(isSelected ? activeIcon : icon, color: isSelected ? Theme.of(context).colorScheme.primary : null),
-            const SizedBox(height: 2),
+            Icon(
+              isSelected ? activeIcon : icon,
+              size: 22,
+              color: isSelected ? Theme.of(context).colorScheme.primary : null,
+            ),
             Text(
               label,
               style: TextStyle(
-                fontSize: 11,
+                fontSize: 10,
                 color: isSelected ? Theme.of(context).colorScheme.primary : null,
               ),
             ),

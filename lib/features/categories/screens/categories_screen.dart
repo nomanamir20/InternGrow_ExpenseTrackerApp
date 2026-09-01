@@ -153,7 +153,9 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
     final confirmed = await Get.dialog<bool>(
       AlertDialog(
         title: const Text('Delete Category'),
-        content: Text('Delete "${category.name}"? Existing transactions in this category will keep showing it, but it won\'t be selectable for new ones.'),
+        content: Text(
+          'Delete "${category.name}"? Existing transactions in this category will keep showing it, but it won\'t be selectable for new ones.',
+        ),
         actions: [
           TextButton(onPressed: () => Get.back(result: false), child: const Text('Cancel')),
           TextButton(onPressed: () => Get.back(result: true), child: const Text('Delete')),
@@ -217,10 +219,11 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
               return ListView.separated(
                 padding: const EdgeInsets.symmetric(horizontal: 16),
                 itemCount: list.length,
-                separatorBuilder: (_, __) => const SizedBox(height: 8),
+                separatorBuilder: (_, _) => const SizedBox(height: 8),
                 itemBuilder: (context, index) {
                   final category = list[index];
                   final color = Color(category.colorValue);
+                  final iconData = IconData(category.iconCodePoint, fontFamily: 'MaterialIcons');
 
                   return Container(
                     padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
@@ -234,7 +237,7 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
                           width: 40,
                           height: 40,
                           decoration: BoxDecoration(color: color.withValues(alpha: 0.15), shape: BoxShape.circle),
-                          child: Icon(IconData(category.iconCodePoint, fontFamily: 'MaterialIcons'), color: color),
+                          child: Icon(iconData, color: color),
                         ),
                         const SizedBox(width: 14),
                         Expanded(

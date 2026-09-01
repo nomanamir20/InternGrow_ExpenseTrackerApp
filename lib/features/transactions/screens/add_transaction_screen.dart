@@ -6,6 +6,7 @@ import '../../../core/theme/app_colors.dart';
 import '../../../data/models/category_model.dart';
 import '../../../data/models/transaction_type.dart';
 import '../../../shared/widgets/app_text_field.dart';
+import '../../categories/controllers/category_controller.dart';
 import '../controllers/transaction_controller.dart';
 
 class AddTransactionScreen extends StatefulWidget {
@@ -21,7 +22,8 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
   final _amountController = TextEditingController();
   final _noteController = TextEditingController();
 
-  late final TransactionController _controller;
+  late final TransactionController _transactionController;
+  late final CategoryController _categoryController;
   TransactionType _selectedType = TransactionType.expense;
   CategoryModel? _selectedCategory;
   DateTime _selectedDate = DateTime.now();
@@ -29,10 +31,9 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
   @override
   void initState() {
     super.initState();
-    _controller = Get.find<TransactionController>();
+    _transactionController = Get.find<TransactionController>();
+    _categoryController = Get.find<CategoryController>();
 
-    // Preselect the transaction type if one was passed in (e.g. "+ Income"
-    // vs "+ Expense" quick-action buttons on Home, built in a later step).
     final args = Get.arguments;
     if (args is TransactionType) {
       _selectedType = args;
@@ -42,7 +43,7 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
   }
 
   void _setDefaultCategory() {
-    final categories = _controller.categoriesForType(_selectedType);
+    final categories = _categoryController.byType(_selectedType);
     _selectedCategory = categories.isNotEmpty ? categories.first : null;
   }
 
@@ -81,7 +82,7 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
       return;
     }
 
-    _controller.addTransaction(
+    _transactionController.addTransaction(
       title: _titleController.text.trim(),
       amount: amount,
       type: _selectedType,
@@ -113,7 +114,6 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Income / Expense toggle
               Container(
                 padding: const EdgeInsets.all(4),
                 decoration: BoxDecoration(
@@ -177,8 +177,18 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
 
               Text('Category', style: Theme.of(context).textTheme.labelLarge?.copyWith(fontWeight: FontWeight.w600)),
               const SizedBox(height: 8),
+              // Reads from CategoryController's real RxList, so Obx has an
+              // actual observable to track — fixes the "improper use of
+              // GetX" crash, and also means newly-added categories appear
+              // here immediately without needing to reopen this screen.
               Obx(() {
-                final categories = _controller.categoriesForType(_selectedType);
+                final categories = _categoryController.byType(_selectedType);
+
+                if (categories.isEmpty) {
+                  return Text('No categories yet — add one from the Categories tab.',
+                      style: TextStyle(color: subTextColor, fontSize: 13));
+                }
+
                 return Wrap(
                   spacing: 8,
                   runSpacing: 8,
@@ -298,6 +308,7 @@ class _CategoryChip extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final color = Color(category.colorValue);
+    final iconData = IconData(category.iconCodePoint, fontFamily: 'MaterialIcons');
 
     return InkWell(
       onTap: onTap,
@@ -313,7 +324,7 @@ class _CategoryChip extends StatelessWidget {
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(IconData(category.iconCodePoint, fontFamily: 'MaterialIcons'), size: 16, color: color),
+            Icon(iconData, size: 16, color: color),
             const SizedBox(width: 6),
             Text(
               category.name,
