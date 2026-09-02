@@ -2,7 +2,7 @@ import 'package:get/get.dart';
 import 'package:hive/hive.dart';
 import 'package:intl/intl.dart';
 import 'package:uuid/uuid.dart';
-
+import 'package:collection/collection.dart';
 import '../../../core/constants/hive_boxes.dart';
 import '../../../data/models/budget_model.dart';
 import '../../../data/models/category_model.dart';
