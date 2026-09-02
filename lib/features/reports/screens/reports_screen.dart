@@ -1,12 +1,32 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:printing/printing.dart';
 
+import '../../../core/services/pdf_report_service.dart';
 import '../../../core/theme/app_colors.dart';
 import '../controllers/reports_controller.dart';
 
 class ReportsScreen extends StatelessWidget {
   const ReportsScreen({super.key});
+
+  Future<void> _exportPdf(ReportsController controller) async {
+    final pdfService = PdfReportService();
+
+    final doc = await pdfService.buildMonthlyReport(
+      month: controller.selectedMonth.value,
+      income: controller.monthlyIncome,
+      expense: controller.monthlyExpense,
+      categoryBreakdown: controller.expenseByCategory,
+    );
+
+    final fileName = 'InternGrow_Report_${controller.formattedSelectedMonth.replaceAll(' ', '_')}.pdf';
+
+    await Printing.sharePdf(
+      bytes: await doc.save(),
+      filename: fileName,
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -16,12 +36,20 @@ class ReportsScreen extends StatelessWidget {
     final borderColor = isDark ? AppColors.darkBorder : AppColors.lightBorder;
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Reports')),
+      appBar: AppBar(
+        title: const Text('Reports'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.picture_as_pdf_outlined),
+            tooltip: 'Export PDF',
+            onPressed: () => _exportPdf(controller),
+          ),
+        ],
+      ),
       body: Obx(() {
         return ListView(
           padding: const EdgeInsets.all(20),
           children: [
-            // Month selector
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
               decoration: BoxDecoration(
@@ -48,7 +76,6 @@ class ReportsScreen extends StatelessWidget {
             ),
             const SizedBox(height: 20),
 
-            // Summary row
             Row(
               children: [
                 Expanded(
@@ -175,6 +202,16 @@ class ReportsScreen extends StatelessWidget {
                 const SizedBox(width: 20),
                 _LegendDot(color: AppColors.expense, label: 'Expense'),
               ],
+            ),
+            const SizedBox(height: 20),
+
+            SizedBox(
+              width: double.infinity,
+              child: OutlinedButton.icon(
+                onPressed: () => _exportPdf(controller),
+                icon: const Icon(Icons.download_outlined),
+                label: const Text('Export This Month as PDF'),
+              ),
             ),
           ],
         );

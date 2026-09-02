@@ -21,7 +21,7 @@
 
 ### Upgrade Features
 - [ ] Local Database (Hive)
-- [ ] PDF Report Export
+- [x] PDF Report Export
 - [ ] Cloud Sync
 - [ ] Reminder Notifications
 
