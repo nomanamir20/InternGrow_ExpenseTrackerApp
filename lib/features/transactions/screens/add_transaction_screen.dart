@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-
+import '../../../shared/widgets/category_icon.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../data/models/category_model.dart';
 import '../../../data/models/transaction_type.dart';
@@ -324,7 +324,7 @@ class _CategoryChip extends StatelessWidget {
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(iconData, size: 16, color: color),
+            CategoryIcon(category: category, color: color, size: 16),
             const SizedBox(width: 6),
             Text(
               category.name,

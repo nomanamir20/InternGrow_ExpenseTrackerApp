@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
+import '../../../shared/widgets/category_icon.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../data/models/category_model.dart';
 import '../controllers/budget_controller.dart';
@@ -179,7 +179,7 @@ class BudgetScreen extends StatelessWidget {
                   Row(
                     children: [
                       if (category != null)
-                        Icon(IconData(category.iconCodePoint, fontFamily: 'MaterialIcons'), color: color, size: 20),
+                        CategoryIcon(category: category, color: color, size: 20),
                       const SizedBox(width: 8),
                       Expanded(
                         child: Text(

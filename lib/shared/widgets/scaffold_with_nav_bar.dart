@@ -76,72 +76,41 @@ class ScaffoldWithNavBar extends StatelessWidget {
           onPressed: () => _showQuickAddSheet(context),
           child: const Icon(Icons.add),
         ),
-        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-        bottomNavigationBar: SizedBox(
-          height: 64,
-          child: BottomAppBar(
-            shape: const CircularNotchedRectangle(),
-            notchMargin: 8,
-            padding: EdgeInsets.zero,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                _NavIcon(icon: Icons.dashboard_outlined, activeIcon: Icons.dashboard, label: 'Home', index: 0, controller: controller),
-                _NavIcon(icon: Icons.receipt_long_outlined, activeIcon: Icons.receipt_long, label: 'History', index: 1, controller: controller),
-                const SizedBox(width: 40),
-                _NavIcon(icon: Icons.pie_chart_outline, activeIcon: Icons.pie_chart, label: 'Reports', index: 2, controller: controller),
-                _NavIcon(icon: Icons.person_outline, activeIcon: Icons.person, label: 'Profile', index: 4, controller: controller),
-              ],
+        bottomNavigationBar: BottomNavigationBar(
+          currentIndex: controller.currentIndex.value,
+          onTap: controller.changeTab,
+          type: BottomNavigationBarType.fixed,
+          selectedFontSize: 11,
+          unselectedFontSize: 11,
+          items: const [
+            BottomNavigationBarItem(
+              icon: Icon(Icons.dashboard_outlined),
+              activeIcon: Icon(Icons.dashboard),
+              label: 'Home',
             ),
-          ),
-        ),
-      );
-    });
-  }
-}
-
-class _NavIcon extends StatelessWidget {
-  final IconData icon;
-  final IconData activeIcon;
-  final String label;
-  final int index;
-  final NavShellController controller;
-
-  const _NavIcon({
-    required this.icon,
-    required this.activeIcon,
-    required this.label,
-    required this.index,
-    required this.controller,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final isSelected = controller.currentIndex.value == index;
-
-    return InkWell(
-      onTap: () => controller.changeTab(index),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 10),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(
-              isSelected ? activeIcon : icon,
-              size: 22,
-              color: isSelected ? Theme.of(context).colorScheme.primary : null,
+            BottomNavigationBarItem(
+              icon: Icon(Icons.receipt_long_outlined),
+              activeIcon: Icon(Icons.receipt_long),
+              label: 'History',
             ),
-            Text(
-              label,
-              style: TextStyle(
-                fontSize: 10,
-                color: isSelected ? Theme.of(context).colorScheme.primary : null,
-              ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.pie_chart_outline),
+              activeIcon: Icon(Icons.pie_chart),
+              label: 'Reports',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.account_balance_wallet_outlined),
+              activeIcon: Icon(Icons.account_balance_wallet),
+              label: 'Budget',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.person_outline),
+              activeIcon: Icon(Icons.person),
+              label: 'Profile',
             ),
           ],
         ),
-      ),
-    );
+      );
+    });
   }
 }

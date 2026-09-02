@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
+import '../../../shared/widgets/category_icon.dart';
 import '../../../core/constants/category_icons.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../data/models/category_model.dart';
@@ -237,7 +237,7 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
                           width: 40,
                           height: 40,
                           decoration: BoxDecoration(color: color.withValues(alpha: 0.15), shape: BoxShape.circle),
-                          child: Icon(iconData, color: color),
+                          child: CategoryIcon(category: category, color: color),
                         ),
                         const SizedBox(width: 14),
                         Expanded(

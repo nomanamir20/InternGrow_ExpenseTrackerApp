@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-
+import '../../../shared/widgets/category_icon.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../data/models/transaction_model.dart';
 import '../../../data/models/transaction_type.dart';
@@ -177,7 +177,7 @@ class _TransactionTile extends StatelessWidget {
             width: 44,
             height: 44,
             decoration: BoxDecoration(color: categoryColor.withValues(alpha: 0.15), shape: BoxShape.circle),
-            child: Icon(iconData, color: categoryColor, size: 20),
+            child: CategoryIcon(category: category, color: categoryColor, size: 20),
           ),
           const SizedBox(width: 12),
           Expanded(
