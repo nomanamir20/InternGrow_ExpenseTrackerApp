@@ -21,6 +21,8 @@ class CategoryController extends GetxController {
     categories.assignAll(_categoriesBox.values.toList());
   }
 
+  void refreshFromHive() => _loadCategories();
+
   List<CategoryModel> byType(TransactionType type) {
     return categories.where((c) => c.type == type).toList();
   }

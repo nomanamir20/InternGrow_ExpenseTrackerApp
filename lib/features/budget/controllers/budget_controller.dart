@@ -40,6 +40,7 @@ class BudgetController extends GetxController {
   void _loadBudgets() {
     budgets.assignAll(_budgetsBox.values.where((b) => b.month == currentMonthKey).toList());
   }
+  void refreshFromHive() => _loadBudgets();
 
   Future<void> setBudget({required String categoryId, required double monthlyLimit}) async {
     // If a budget for this category+month already exists, update it instead

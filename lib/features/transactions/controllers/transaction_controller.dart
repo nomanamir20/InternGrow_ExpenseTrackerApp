@@ -26,6 +26,7 @@ class TransactionController extends GetxController {
     all.sort((a, b) => b.date.compareTo(a.date)); // newest first
     transactions.assignAll(all);
   }
+  void refreshFromHive() => _loadTransactions();
 
   List<CategoryModel> categoriesForType(TransactionType type) {
     return _categoriesBox.values.where((c) => c.type == type).toList();
