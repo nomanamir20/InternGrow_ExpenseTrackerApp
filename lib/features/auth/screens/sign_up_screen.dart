@@ -13,7 +13,7 @@ class SignUpScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.put(AuthController());
+    final controller = Get.find<AuthController>();
     final formKey = GlobalKey<FormState>();
     final fullNameController = TextEditingController();
     final emailController = TextEditingController();

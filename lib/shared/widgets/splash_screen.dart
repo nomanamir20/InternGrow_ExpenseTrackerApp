@@ -22,7 +22,7 @@ class _SplashScreenState extends State<SplashScreen> {
     await Future.delayed(const Duration(milliseconds: 1200));
     if (!mounted) return;
 
-    final authController = Get.put(AuthController());
+    final authController = Get.find<AuthController>();
 
     if (authController.currentUser != null) {
       Get.offAllNamed(AppRoutes.home);

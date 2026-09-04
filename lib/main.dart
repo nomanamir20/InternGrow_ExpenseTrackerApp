@@ -19,6 +19,7 @@ import 'features/budget/controllers/budget_controller.dart';
 import 'features/profile/controllers/sync_controller.dart';
 import 'core/services/notification_service.dart';
 import 'features/profile/controllers/reminder_controller.dart';
+import 'features/auth/controllers/auth_controller.dart';
 import 'firebase_options.dart';
 
 Future<void> main() async {
@@ -51,6 +52,7 @@ Future<void> main() async {
   // individual screens via Get.put — this guarantees they're available
   // via Get.find() no matter which screen the user reaches first.
   Get.put(ThemeController());
+  Get.put(AuthController(), permanent: true);
   Get.put(CategoryController(), permanent: true);
   Get.put(TransactionController(), permanent: true);
   Get.put(ReportsController(), permanent: true);

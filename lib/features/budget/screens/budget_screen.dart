@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../../../shared/widgets/category_icon.dart';
+
 import '../../../core/theme/app_colors.dart';
 import '../../../data/models/category_model.dart';
+import '../../../shared/widgets/category_icon.dart';
 import '../controllers/budget_controller.dart';
 
 class BudgetScreen extends StatelessWidget {
@@ -10,7 +11,7 @@ class BudgetScreen extends StatelessWidget {
 
   void _showSetBudgetSheet(BuildContext context, BudgetController controller, {CategoryModel? existingCategory, double? existingAmount}) {
     final amountController = TextEditingController(text: existingAmount?.toStringAsFixed(0) ?? '');
-    CategoryModel? selectedCategory = existingCategory;
+    final Rx<CategoryModel?> selectedCategory = Rx<CategoryModel?>(existingCategory);
 
     showModalBottomSheet(
       context: context,
@@ -19,65 +20,72 @@ class BudgetScreen extends StatelessWidget {
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
       builder: (sheetContext) {
-        return StatefulBuilder(
-          builder: (context, setSheetState) {
-            final availableCategories = existingCategory != null
-                ? [existingCategory]
-                : controller.categoriesWithoutBudget;
-
-            return Padding(
-              padding: EdgeInsets.only(
-                left: 20,
-                right: 20,
-                top: 20,
-                bottom: MediaQuery.of(context).viewInsets.bottom + 20,
+        return Padding(
+          padding: EdgeInsets.only(
+            left: 20,
+            right: 20,
+            top: 20,
+            bottom: MediaQuery.of(sheetContext).viewInsets.bottom + 20,
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                existingCategory != null ? 'Edit Budget' : 'Set a Budget',
+                style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w700),
               ),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    existingCategory != null ? 'Edit Budget' : 'Set a Budget',
-                    style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w700),
-                  ),
-                  const SizedBox(height: 20),
+              const SizedBox(height: 20),
 
-                  if (existingCategory == null) ...[
-                    if (availableCategories.isEmpty)
-                      const Text('All your expense categories already have a budget set.')
-                    else ...[
+              if (existingCategory == null) ...[
+                // Reactive: rebuilds automatically as controller.budgets
+                // changes, so the list of "still-unbudgeted" categories is
+                // always correct — including immediately after a previous
+                // category was just budgeted, with no need to reopen the sheet.
+                Obx(() {
+                  final availableCategories = controller.categoriesWithoutBudget;
+
+                  if (availableCategories.isEmpty) {
+                    return const Text('All your expense categories already have a budget set.');
+                  }
+
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
                       Text('Category', style: Theme.of(context).textTheme.labelLarge?.copyWith(fontWeight: FontWeight.w600)),
                       const SizedBox(height: 8),
-                      Wrap(
-                        spacing: 8,
-                        runSpacing: 8,
-                        children: [
-                          for (final category in availableCategories)
-                            ChoiceChip(
-                              label: Text(category.name),
-                              selected: selectedCategory?.id == category.id,
-                              onSelected: (_) => setSheetState(() => selectedCategory = category),
-                            ),
-                        ],
-                      ),
+                      Obx(() => Wrap(
+                            spacing: 8,
+                            runSpacing: 8,
+                            children: [
+                              for (final category in availableCategories)
+                                ChoiceChip(
+                                  label: Text(category.name),
+                                  selected: selectedCategory.value?.id == category.id,
+                                  onSelected: (_) => selectedCategory.value = category,
+                                ),
+                            ],
+                          )),
                       const SizedBox(height: 20),
                     ],
-                  ] else ...[
-                    Text('Category: ${existingCategory.name}', style: const TextStyle(fontWeight: FontWeight.w600)),
-                    const SizedBox(height: 20),
-                  ],
+                  );
+                }),
+              ] else ...[
+                Text('Category: ${existingCategory.name}', style: const TextStyle(fontWeight: FontWeight.w600)),
+                const SizedBox(height: 20),
+              ],
 
-                  TextField(
-                    controller: amountController,
-                    keyboardType: const TextInputType.numberWithOptions(decimal: true),
-                    decoration: const InputDecoration(labelText: 'Monthly Limit', prefixText: '\$ '),
-                  ),
-                  const SizedBox(height: 24),
+              TextField(
+                controller: amountController,
+                keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                decoration: const InputDecoration(labelText: 'Monthly Limit', prefixText: '\$ '),
+              ),
+              const SizedBox(height: 24),
 
-                  SizedBox(
+              Obx(() => SizedBox(
                     width: double.infinity,
                     child: ElevatedButton(
-                      onPressed: (selectedCategory == null || availableCategories.isEmpty && existingCategory == null)
+                      onPressed: selectedCategory.value == null
                           ? null
                           : () {
                               final amount = double.tryParse(amountController.text.trim());
@@ -86,16 +94,14 @@ class BudgetScreen extends StatelessWidget {
                                     snackPosition: SnackPosition.BOTTOM);
                                 return;
                               }
-                              controller.setBudget(categoryId: selectedCategory!.id, monthlyLimit: amount);
+                              controller.setBudget(categoryId: selectedCategory.value!.id, monthlyLimit: amount);
                               Navigator.of(sheetContext).pop();
                             },
                       child: const Text('Save Budget'),
                     ),
-                  ),
-                ],
-              ),
-            );
-          },
+                  )),
+            ],
+          ),
         );
       },
     );
@@ -178,8 +184,7 @@ class BudgetScreen extends StatelessWidget {
                 children: [
                   Row(
                     children: [
-                      if (category != null)
-                        CategoryIcon(category: category, color: color, size: 20),
+                      CategoryIcon(category: category, color: color, size: 20),
                       const SizedBox(width: 8),
                       Expanded(
                         child: Text(
