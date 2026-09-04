@@ -1,7 +1,10 @@
 import 'package:get/get.dart';
 import 'package:hive/hive.dart';
 import 'package:uuid/uuid.dart';
+import 'package:collection/collection.dart';
 
+import '../../budget/controllers/budget_controller.dart';
+import '../../profile/controllers/reminder_controller.dart';
 import '../../../core/constants/hive_boxes.dart';
 import '../../../data/models/category_model.dart';
 import '../../../data/models/transaction_model.dart';
@@ -60,7 +63,32 @@ class TransactionController extends GetxController {
 
     await _transactionsBox.put(transaction.id, transaction);
     _loadTransactions();
+
+   if (type == TransactionType.expense) {
+      _checkBudgetAfterExpense(categoryId);
+    }
   }
+   void _checkBudgetAfterExpense(String categoryId) {
+    try {
+      final budgetController = Get.find<BudgetController>();
+      final reminderController = Get.find<ReminderController>();
+
+      final progress = budgetController.budgetProgressList.firstWhereOrNull(
+        (p) => p.budget.categoryId == categoryId,
+      );
+
+      if (progress != null && progress.category != null) {
+        reminderController.checkBudgetThresholds(
+          categoryName: progress.category!.name,
+          spent: progress.spent,
+          limit: progress.budget.monthlyLimit,
+        );
+      }
+    } catch (_) {
+      // Controllers not yet available (e.g. during initial data restore) —
+      // safe to skip the check in that case.
+    }
+    }
 
   Future<void> deleteTransaction(String id) async {
     await _transactionsBox.delete(id);

@@ -23,7 +23,7 @@
 - [ ] Local Database (Hive)
 - [x] PDF Report Export
 - [x] Cloud Sync
-- [ ] Reminder Notifications
+- [x] Reminder Notifications
 
 ---
 

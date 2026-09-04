@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-
+import '../controllers/reminder_controller.dart';
 import '../../../core/routes/app_routes.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/theme_controller.dart';
@@ -25,6 +25,17 @@ class ProfileScreen extends StatelessWidget {
 
     if (confirmed == true) {
       Get.find<AuthController>().signOut();
+    }
+  }
+
+    Future<void> _pickReminderTime(BuildContext context, ReminderController controller) async {
+    final picked = await showTimePicker(
+      context: context,
+      initialTime: TimeOfDay(hour: controller.reminderHour.value, minute: controller.reminderMinute.value),
+    );
+
+    if (picked != null) {
+      controller.updateReminderTime(picked.hour, picked.minute);
     }
   }
 
@@ -158,6 +169,18 @@ class ProfileScreen extends StatelessWidget {
                   onChanged: themeController.toggleTheme,
                 ),
               )),
+          Obx(() {
+            final reminderController = Get.find<ReminderController>();
+            return _SettingsTile(
+              icon: Icons.notifications_active_outlined,
+              title: 'Daily Reminder (${reminderController.reminderHour.value.toString().padLeft(2, '0')}:${reminderController.reminderMinute.value.toString().padLeft(2, '0')})',
+              trailing: Switch(
+                value: reminderController.remindersEnabled.value,
+                onChanged: reminderController.toggleReminders,
+              ),
+              onTap: () => _pickReminderTime(context, reminderController),
+            );
+          }),
 
           const SizedBox(height: 20),
           Text('Account', style: Theme.of(context).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w700)),

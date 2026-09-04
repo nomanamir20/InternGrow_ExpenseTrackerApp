@@ -17,6 +17,8 @@ import 'features/transactions/controllers/transaction_controller.dart';
 import 'features/reports/controllers/reports_controller.dart';
 import 'features/budget/controllers/budget_controller.dart';
 import 'features/profile/controllers/sync_controller.dart';
+import 'core/services/notification_service.dart';
+import 'features/profile/controllers/reminder_controller.dart';
 import 'firebase_options.dart';
 
 Future<void> main() async {
@@ -43,6 +45,7 @@ Future<void> main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  await NotificationService().initialize();
 
   // Register all app-wide controllers ONCE here, rather than ad hoc in
   // individual screens via Get.put — this guarantees they're available
@@ -53,6 +56,8 @@ Future<void> main() async {
   Get.put(ReportsController(), permanent: true);
   Get.put(BudgetController(), permanent: true);
   Get.put(SyncController(), permanent: true);
+  Get.put(ReminderController(), permanent: true);
+
 
   runApp(const InternGrowExpenseTrackerApp());
 }
