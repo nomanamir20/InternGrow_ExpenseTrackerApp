@@ -20,7 +20,7 @@
 - [x] Transaction History
 
 ### Upgrade Features
-- [ ] Local Database (Hive)
+- [x] Local Database (Hive)
 - [x] PDF Report Export
 - [x] Cloud Sync
 - [x] Reminder Notifications

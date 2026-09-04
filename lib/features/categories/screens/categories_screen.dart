@@ -6,6 +6,7 @@ import '../../../core/theme/app_colors.dart';
 import '../../../data/models/category_model.dart';
 import '../../../data/models/transaction_type.dart';
 import '../controllers/category_controller.dart';
+import '../../../shared/widgets/category_icon.dart';
 
 class CategoriesScreen extends StatefulWidget {
   const CategoriesScreen({super.key});
@@ -223,7 +224,6 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
                 itemBuilder: (context, index) {
                   final category = list[index];
                   final color = Color(category.colorValue);
-                  final iconData = IconData(category.iconCodePoint, fontFamily: 'MaterialIcons');
 
                   return Container(
                     padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),

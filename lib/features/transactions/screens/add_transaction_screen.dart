@@ -8,6 +8,7 @@ import '../../../data/models/transaction_type.dart';
 import '../../../shared/widgets/app_text_field.dart';
 import '../../categories/controllers/category_controller.dart';
 import '../controllers/transaction_controller.dart';
+import '../../../shared/widgets/category_icon.dart';
 
 class AddTransactionScreen extends StatefulWidget {
   const AddTransactionScreen({super.key});
@@ -308,7 +309,6 @@ class _CategoryChip extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final color = Color(category.colorValue);
-    final iconData = IconData(category.iconCodePoint, fontFamily: 'MaterialIcons');
 
     return InkWell(
       onTap: onTap,

@@ -6,6 +6,7 @@ import '../../../core/theme/app_colors.dart';
 import '../../../data/models/transaction_model.dart';
 import '../../../data/models/transaction_type.dart';
 import '../controllers/transaction_controller.dart';
+import '../../../shared/widgets/category_icon.dart';
 
 class TransactionsScreen extends StatefulWidget {
   const TransactionsScreen({super.key});
@@ -161,9 +162,6 @@ class _TransactionTile extends StatelessWidget {
     final isIncome = transaction.type == TransactionType.income;
     final amountColor = isIncome ? AppColors.income : AppColors.expense;
     final categoryColor = category != null ? Color(category.colorValue) : AppColors.primary;
-    final iconData = category != null
-        ? IconData(category.iconCodePoint, fontFamily: 'MaterialIcons')
-        : Icons.category_outlined;
 
     return Container(
       padding: const EdgeInsets.all(12),

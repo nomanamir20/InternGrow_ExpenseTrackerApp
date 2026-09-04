@@ -196,13 +196,7 @@ class _RecentTransactionTile extends StatelessWidget {
             width: 40,
             height: 40,
             decoration: BoxDecoration(color: categoryColor.withValues(alpha: 0.15), shape: BoxShape.circle),
-            child: Icon(
-              category != null
-                  ? IconData(category.iconCodePoint, fontFamily: 'MaterialIcons')
-                  : Icons.category_outlined,
-              color: categoryColor,
-              size: 18,
-            ),
+            child: CategoryIcon(category: category, color: categoryColor, size: 18),
           ),
           const SizedBox(width: 12),
           Expanded(

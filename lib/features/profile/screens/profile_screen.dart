@@ -199,7 +199,15 @@ class ProfileScreen extends StatelessWidget {
           ),
 
           const SizedBox(height: 20),
-          Center(child: Text('InternGrow Finance v1.0.0', style: TextStyle(color: subTextColor, fontSize: 12))),
+          Center(
+            child: Column(
+              children: [
+                Text('InternGrow Finance v1.0.0', style: TextStyle(color: subTextColor, fontSize: 12)),
+                const SizedBox(height: 4),
+                Text('Local storage powered by Hive', style: TextStyle(color: subTextColor, fontSize: 11)),
+              ],
+            ),
+          ),
         ],
       ),
     );

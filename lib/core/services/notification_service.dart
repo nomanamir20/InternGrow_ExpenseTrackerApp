@@ -13,8 +13,6 @@ class NotificationService {
   static const _channelName = 'InternGrow Finance Reminders';
 
   Future<void> initialize() async {
-    // Local notifications aren't supported on web the same way — skip
-    // initialization there rather than throwing.
     if (kIsWeb) return;
 
     tz_data.initializeTimeZones();
@@ -26,7 +24,6 @@ class NotificationService {
       const InitializationSettings(android: androidSettings, iOS: iosSettings),
     );
 
-    // Android 13+ requires explicit runtime permission for notifications.
     await _plugin
         .resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>()
         ?.requestNotificationsPermission();
@@ -36,8 +33,6 @@ class NotificationService {
         ?.requestPermissions(alert: true, badge: true, sound: true);
   }
 
-  /// Schedules a repeating daily reminder at the given hour/minute to
-  /// prompt the user to log their expenses for the day.
   Future<void> scheduleDailyReminder({required int hour, required int minute}) async {
     if (kIsWeb) return;
 
@@ -56,7 +51,8 @@ class NotificationService {
         iOS: DarwinNotificationDetails(),
       ),
       androidScheduleMode: AndroidScheduleMode.inexactAllowWhileIdle,
-      matchDateTimeComponents: DateTimeComponents.time, // repeats daily at this time
+      uiLocalNotificationDateInterpretation: UILocalNotificationDateInterpretation.absoluteTime,
+      matchDateTimeComponents: DateTimeComponents.time,
     );
   }
 
@@ -65,7 +61,6 @@ class NotificationService {
     await _plugin.cancel(_dailyReminderId);
   }
 
-  /// Fires an immediate notification — used for budget threshold alerts.
   Future<void> showInstantNotification({
     required int id,
     required String title,
