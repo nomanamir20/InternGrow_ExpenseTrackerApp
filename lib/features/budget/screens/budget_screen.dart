@@ -132,7 +132,16 @@ class BudgetScreen extends StatelessWidget {
     final borderColor = isDark ? AppColors.darkBorder : AppColors.lightBorder;
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Budget Tracking')),
+      appBar: AppBar(
+        title: const Text('Budget Tracking'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.add),
+            tooltip: 'Add Budget',
+            onPressed: () => _showSetBudgetSheet(context, controller),
+          ),
+        ],
+      ),
       body: Obx(() {
         final progressList = controller.budgetProgressList;
 
@@ -250,10 +259,6 @@ class BudgetScreen extends StatelessWidget {
           },
         );
       }),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () => _showSetBudgetSheet(context, controller),
-        child: const Icon(Icons.add),
-      ),
     );
   }
 }
